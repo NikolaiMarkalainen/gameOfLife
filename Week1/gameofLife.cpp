@@ -24,8 +24,12 @@ int Life::neighbor_count(int row, int col)
 {
     int i, j;
     int count = 0;
-    for (i = row - 1; i <= row + 1; i++)
-        for (j = col - 1; j <= col + 1; j++)
+    int row_start = max(row - 1, 1);
+    int row_end = min(row + 1, maxrow);
+    int col_start = max(col - 1, 1);
+    int col_end = min(col + 1, maxcol);
+    for (i = row_start; i <= row_end; i++)
+        for (j = col_start; j <= col_end; j++)
             count += grid[i][j];  //  Increase the count if neighbor is alive.
     count -= grid[row][col]; //  Reduce count, since cell is not its own neighbor.
     return count;
