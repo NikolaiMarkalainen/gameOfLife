@@ -1,7 +1,7 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-const int maxrow = 20, maxcol = 60;    //  grid dimensions
 
 class Life {
 
@@ -9,8 +9,14 @@ public:
    void initialize();
    void print();
    void update();
+   int maxrow,maxcol;
+   Life(){
+       maxrow = 20;
+       maxcol = 60;
+       grid.resize(maxrow+2, vector<int>(maxcol+2));
+   }
 private:
-   int grid[maxrow + 2][maxcol + 2];  //  allows for two extra rows and columns
+    vector<vector<int>> grid;  //  allows for two extra rows and columns
    int neighbor_count(int row, int col);
 };
 
@@ -50,7 +56,7 @@ void Life::update()
 }
 
 
-void instructions()
+void instructions(int maxrow, int maxcol)
 {
    cout << "Welcome to Conway's game of Life." << endl;
    cout << "This game uses a grid of size "
@@ -65,6 +71,10 @@ void instructions()
 void Life::initialize()
 {
    int row, col;
+   cout << "What size of grid do you wish to have x by x" << endl;
+   cin >> maxrow >> maxcol;
+   grid.resize(maxrow+2, vector<int>(maxcol+2));
+   instructions(maxrow, maxcol);
    for (row = 0; row <= maxrow+1; row++)
       for (col = 0; col <= maxcol+1; col++)
          grid[row][col] = 0;
@@ -123,7 +133,6 @@ bool user_says_yes()
 int main ()
 {
    Life configuration;
-   instructions();
    configuration.initialize();
    configuration.print();
    while(user_says_yes()){
