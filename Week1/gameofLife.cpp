@@ -13,6 +13,7 @@ public:
    void print();
    void update();
    void readFile();
+   void saveConfiguration();
    int maxrow,maxcol;
    Life(){
        maxrow = 20;
@@ -104,7 +105,6 @@ void Life::initialize()
            }
        }
    }
-
 }
 
 
@@ -173,6 +173,36 @@ void Life::readFile() {
     cout << "Continue with this text file ? " << endl;
 }
 
+void Life::saveConfiguration() {
+    int row,col;
+    string answer;
+    string fileName;
+    cout << "Do you wish to save the configuration ? (y/n) " << endl;
+    cin >> answer;
+    string lines;
+    if(answer == "y" || answer == "Y"){
+        cout << "Give name to the file" << endl;
+        cin >> fileName;
+        ofstream customConfiguration(fileName+".txt");
+        if(customConfiguration.is_open()){
+            customConfiguration << maxrow << ', ';
+            customConfiguration << maxcol;
+            customConfiguration << endl;
+            for (row = 1; row <= maxrow; row++) {
+                for (col = 1; col <= maxcol; col++)
+                    if (grid[row][col] == 1) customConfiguration << '*';
+                    else customConfiguration << ' ';
+                customConfiguration << endl;
+            }
+        }
+    }
+    else if (answer == "n" || answer == "N"){
+
+    }
+    else{
+        cout << "Wrong input either y or n";
+    }
+}
 int main () {
     Life configuration;
     string answer;
@@ -193,5 +223,6 @@ int main () {
     configuration.print();
     cout << "Continue viewing new generations?" << endl;
     }
+    configuration.saveConfiguration();
 }
 
