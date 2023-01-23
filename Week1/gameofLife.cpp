@@ -2,9 +2,12 @@
 #include <vector>
 #include  <bits/stdc++.h>
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 using namespace std;
-
+using namespace this_thread;
+using namespace chrono;
 
 class Life {
 
@@ -15,6 +18,7 @@ public:
    void readFile();
    void saveConfiguration();
    int maxrow,maxcol;
+   int timer;
    Life(){
        maxrow = 20;
        maxcol = 60;
@@ -84,6 +88,8 @@ void Life::initialize()
    int inputLength, rowCount = -1;
    cout << "What size of grid do you wish to have x by x" << endl;
    cin >> maxrow >> maxcol;
+   cout << "Set delay in seconds for the game" << endl;
+   cin >> timer;
    grid.resize(maxrow+2, vector<int>(maxcol+2));
    instructions(maxrow, maxcol);
    for (row = 0; row <= maxrow+1; row++)
@@ -119,28 +125,10 @@ void Life::print()
       cout << endl;
    }
    cout << endl;
+   sleep_until(system_clock::now() + seconds(timer));
 }
 
 
-bool user_says_yes()
-{
-   int c;
-   bool initial_response = true;
-
-   do {  //  Loop until an appropriate input is received.
-      if (initial_response)
-         cout << " (y,n)? " << flush;
-
-      else
-         cout << "Respond with either y or n: " << flush;
-
-      do { //  Ignore white space.
-         c = cin.get();
-      } while (c == '\n' || c ==' ' || c == '\t');
-      initial_response = false;
-   } while (c != 'y' && c != 'Y' && c != 'n' && c != 'N');
-   return (c == 'y' || c == 'Y');
-}
 
 void Life::readFile() {
     int row, col;
@@ -149,6 +137,8 @@ void Life::readFile() {
     string fileName;
     cout << "Enter grid size of the file" << endl;
     cin >> maxrow >> maxcol;
+    cout << "Set delay in seconds for the game" << endl;
+    cin >> timer;
     grid.resize(maxrow+2, vector<int>(maxcol+2));
     for (row = 0; row <= maxrow+1; row++)
         for (col = 0; col <= maxcol+1; col++)
@@ -197,12 +187,13 @@ void Life::saveConfiguration() {
         }
     }
     else if (answer == "n" || answer == "N"){
-
+        cout << "Configuration not saved";
     }
     else{
         cout << "Wrong input either y or n";
     }
 }
+
 int main () {
     Life configuration;
     string answer;
@@ -213,16 +204,37 @@ int main () {
     }
     else if(answer == "n" || answer == "N"){
         configuration.initialize();
-        configuration.print();
-        }
+        configuration.saveConfiguration();
+    }
     else{
         cout << "Wrong input ( y / n )";
     }
-    while(user_says_yes()){
-    configuration.update();
-    configuration.print();
-    cout << "Continue viewing new generations?" << endl;
+    while(true) {
+        configuration.update();
+        configuration.print();
     }
-    configuration.saveConfiguration();
 }
 
+
+
+/*
+ bool user_says_yes()
+{
+   int c;
+   bool initial_response = true;
+
+   do {  //  Loop until an appropriate input is received.
+      if (initial_response)
+         cout << " (y,n)? " << flush;
+
+      else
+         cout << "Respond with either y or n: " << flush;
+
+      do { //  Ignore white space.
+         c = cin.get();
+      } while (c == '\n' || c ==' ' || c == '\t');
+      initial_response = false;
+   } while (c != 'y' && c != 'Y' && c != 'n' && c != 'N');
+   return (c == 'y' || c == 'Y');
+}
+ */
