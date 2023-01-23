@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include  <bits/stdc++.h>
 using namespace std;
 
 
@@ -75,6 +76,8 @@ void instructions(int maxrow, int maxcol)
 void Life::initialize()
 {
    int row, col;
+   string userInput;
+   int inputLength, rowCount = -1;
    cout << "What size of grid do you wish to have x by x" << endl;
    cin >> maxrow >> maxcol;
    grid.resize(maxrow+2, vector<int>(maxcol+2));
@@ -82,20 +85,24 @@ void Life::initialize()
    for (row = 0; row <= maxrow+1; row++)
       for (col = 0; col <= maxcol+1; col++)
          grid[row][col] = 0;
-   cout << "List the coordinates for living cells." << endl;
-   cout << "Terminate the list with the special pair -1 -1" << endl;
-   cin >> row >> col;
-
-   while (row != -1 || col != -1) {
-      if (row >= 1 && row <= maxrow)
-         if (col >= 1 && col <= maxcol)
-            grid[row][col] = 1;
-         else
-            cout << "Column " << col << " is out of range." << endl;
-      else
-         cout << "Row " << row << " is out of range." << endl;
-      cin >> row >> col;
+   cout << "Terminate the list with 'end'" << endl;
+   cout << "how many columns do you wish to add" << endl;
+   cin >> inputLength;
+   cout << "Enter the living cells with '*' and space as dead cells" << endl;
+   while(rowCount < inputLength) {
+       getline(cin, userInput);
+       if (userInput.length() > maxcol) {
+           cout << "Column length is too long" << endl;
+       } else {
+           rowCount +=1;
+           for (int i = 0; i <= userInput.length(); i++) {
+               if (userInput[i] == '*') {
+                   grid[rowCount][i] = 1;
+               }
+           }
+       }
    }
+
 }
 
 
@@ -146,4 +153,14 @@ int main ()
    }
 }
 
-
+/* while (row != -1 || col != -1) {
+    if (row >= 1 && row <= maxrow)
+       if (col >= 1 && col <= maxcol)
+          grid[row][col] = 1;
+       else
+          cout << "Column " << col << " is out of range." << endl;
+    else
+       cout << "Row " << row << " is out of range." << endl;
+    cin >> row >> col;
+ }
+ */
