@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include  <bits/stdc++.h>
+#include <fstream>
+
 using namespace std;
 
 
@@ -10,6 +12,7 @@ public:
    void initialize();
    void print();
    void update();
+   void readFile();
    int maxrow,maxcol;
    Life(){
        maxrow = 20;
@@ -85,7 +88,6 @@ void Life::initialize()
    for (row = 0; row <= maxrow+1; row++)
       for (col = 0; col <= maxcol+1; col++)
          grid[row][col] = 0;
-   cout << "Terminate the list with 'end'" << endl;
    cout << "how many columns do you wish to add" << endl;
    cin >> inputLength;
    cout << "Enter the living cells with '*' and space as dead cells" << endl;
@@ -140,27 +142,56 @@ bool user_says_yes()
    return (c == 'y' || c == 'Y');
 }
 
+void Life::readFile() {
+    int row, col;
+    string lines;
+    int rowCounter;
+    string fileName;
+    cout << "Enter grid size of the file" << endl;
+    cin >> maxrow >> maxcol;
+    grid.resize(maxrow+2, vector<int>(maxcol+2));
+    for (row = 0; row <= maxrow+1; row++)
+        for (col = 0; col <= maxcol+1; col++)
+            grid[row][col] = 0;
+    cout << "Enter text file name" << endl;
+    cin >> fileName;
+    ifstream confFile (fileName);
 
-int main ()
-{
-   Life configuration;
-   configuration.initialize();
-   configuration.print();
-   while(user_says_yes()){
-       configuration.update();
-       configuration.print();
-       cout << "Continue viewing new generations?" << endl;
-   }
+
+    if( confFile.is_open() ) {
+        while ( confFile >> ws && getline(confFile, lines) ){
+            cout << lines << endl;
+            rowCounter +=1;
+            for(int i = 0; i <= lines.length(); i++){
+                if(lines[i] == '*'){
+                    grid[rowCounter][i] = 1;
+                }
+            }
+            confFile >> lines;
+        }
+    }
+    cout << "Continue with this text file ? " << endl;
 }
 
-/* while (row != -1 || col != -1) {
-    if (row >= 1 && row <= maxrow)
-       if (col >= 1 && col <= maxcol)
-          grid[row][col] = 1;
-       else
-          cout << "Column " << col << " is out of range." << endl;
-    else
-       cout << "Row " << row << " is out of range." << endl;
-    cin >> row >> col;
- }
- */
+int main () {
+    Life configuration;
+    string answer;
+    cout << "Do you have initial file configuration" << endl;
+    getline(cin, answer);
+    if(answer == "y" || answer == "Y"){
+        configuration.readFile();
+    }
+    else if(answer == "n" || answer == "N"){
+        configuration.initialize();
+        configuration.print();
+        }
+    else{
+        cout << "Wrong input ( y / n )";
+    }
+    while(user_says_yes()){
+    configuration.update();
+    configuration.print();
+    cout << "Continue viewing new generations?" << endl;
+    }
+}
+
