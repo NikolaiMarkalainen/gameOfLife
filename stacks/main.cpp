@@ -49,6 +49,26 @@ void stackInput(std::string& input){
 
 };
 
+void numberStack() {
+int numberInput;
+std::stack<int> numbers;
+std::cout << "Enter a sequence of integers of increasing value: " << std::endl;
+
+while( std::cin >> numberInput ) {
+ if(numbers.size() > 0 && numberInput <= numbers.top()){
+  break;
+ }
+ numbers.push(numberInput);
+}
+
+std::cout << "Integers in decreasing order: " << std::endl;
+
+while(!numbers.empty()){
+ std::cout << numbers.top() << std::endl;
+ numbers.pop();
+}
+
+};
 
 int main (int argc, char* argv[]) {
  
@@ -62,5 +82,6 @@ int main (int argc, char* argv[]) {
   isPalindrome(word);
   stackInput(word);
  }
-return 0;
+
+numberStack();
 }
