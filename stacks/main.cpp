@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <bits/stdc++.h>
+#include <stack>
+
 
 // function for basic string reversals
 // reverses argv[1] input;
@@ -29,17 +31,36 @@ void isPalindrome(std::string input){
  }
 };
 
+// function to realise stack idea
+// display a character and pop it once its displayed
+// to the console
+
+void stackInput(std::string& input){
+
+ std::stack<char> stack;
+ for(char c : input ) {
+  stack.push(c);
+ }
+
+ while (!stack.empty()) {
+  std::cout << stack.top() << std::endl;
+  stack.pop();
+ }
+
+};
+
 
 int main (int argc, char* argv[]) {
  
+ std::string reversedWord;
  std::string word;
-
  if(argc >= 2 ){
   word = argv[1];
-  std::string originalWord = word;
-  reverseInput(word);
-  std::cout << "Your argument reversed is: " << word << std::endl;
-  isPalindrome(originalWord);
+  reversedWord = word;
+  reverseInput(reversedWord);
+  std::cout << "Your argument reversed is: " << reversedWord << std::endl;
+  isPalindrome(word);
+  stackInput(word);
  }
 return 0;
 }
